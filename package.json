@@ -20,5 +20,9 @@
     "deploy": "sls deploy",
     "postinstall": "sf install"
   },
-  "sfDependencies": {}
+  "sfDependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.9"
+  }
 }
