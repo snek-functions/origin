@@ -2,12 +2,13 @@ import {authenticate} from '@snek-functions/authentication'
 
 import {fn} from './factory'
 
-import {newAccessToken, newRefreshToken} from './internal/token/factory.js'
-
-import {setAuthenticationCookies} from './helper/auth.js'
-
 const login = fn<{username: string; password: string}, void>(
   async (args, _, {res}) => {
+    const {newAccessToken, newRefreshToken} = await import(
+      './internal/token/factory.js'
+    )
+    const {setAuthenticationCookies} = await import('./helper/auth.js')
+
     const {data, errors} = await authenticate.execute(args)
 
     if (errors.length > 0) {
