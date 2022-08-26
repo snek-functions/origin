@@ -1,6 +1,5 @@
 import loginOptional from './decorators/loginOptional.js'
 import {fn} from './factory'
-import {proxyRequest} from './helper/proxy.js'
 
 export interface FetchResponse {
   headers: Headers
@@ -17,6 +16,8 @@ export interface FetchResponse {
 
 const jsonFetch = fn<Parameters<typeof fetch>, FetchResponse>(
   async (fetchParams, _, {req, res}) => {
+    const {proxyRequest} = await import('./helper/proxy.js')
+
     const proxiedRes = await proxyRequest(fetchParams, req)
 
     const responseData = {
