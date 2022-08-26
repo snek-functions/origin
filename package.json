@@ -1,6 +1,6 @@
 {
   "name": "@snek-functions/origin",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "dist/index.js",
   "type": "module",
   "description": "Generated with `snek-functions init`",
