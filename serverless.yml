@@ -1,5 +1,6 @@
-service: snek-functions-graphql-helix-express
+service: origin
 frameworkVersion: '3'
+useDotenv: true
 
 plugins:
   - serverless-offline
