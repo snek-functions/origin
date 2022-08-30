@@ -1,4 +1,4 @@
-import {makeFn} from '@snek-at/functions'
+import { makeFn } from '@snek-at/functions'
 
 export const url = process.env.IS_OFFLINE
   ? process.env.CODESPACE_NAME
