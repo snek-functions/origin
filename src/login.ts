@@ -22,7 +22,7 @@ const login = fn<{username: string; password: string}, void>(
       }
 
       const {accessToken} = newAccessToken({
-        subject: data.uid,
+        subject: data.user_id,
         scope
       })
 
