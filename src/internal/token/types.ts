@@ -18,6 +18,7 @@ export interface NewAccessToken {
   scope: AuthorizationScope
   durration?: string
   fresh?: boolean
+  data?: object
 }
 
 export interface NewRefreshToken {

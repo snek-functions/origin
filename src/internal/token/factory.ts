@@ -11,7 +11,8 @@ export const newAccessToken = ({
   subject,
   scope,
   durration = '5m',
-  fresh = false
+  fresh = false,
+  data
 }: NewAccessToken) => {
   let jwtId: string = crypto.randomUUID()
 
@@ -19,7 +20,8 @@ export const newAccessToken = ({
     {
       scope: scope,
       fresh: !!fresh,
-      type: 'access'
+      type: 'access',
+      data: data
     },
     SHARED_SECRET,
     {
