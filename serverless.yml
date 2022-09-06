@@ -1,4 +1,4 @@
-service: snek-functions-graphql-helix-express
+service: template
 frameworkVersion: '3'
 
 plugins:
@@ -11,12 +11,16 @@ custom:
     - If: '"${self:custom.isOffline}" != "true"'
       Exclude:
         - functions.endpoint.handler
+        - provider.environment.CODESPACE_NAME
       ElseExclude:
         - functions.endpoint.image
 
 provider:
   name: aws
   region: eu-central-1
+
+  environment:
+    CODESPACE_NAME: ${env:CODESPACE_NAME, ""}
 
   ecr:
     images:
