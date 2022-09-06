@@ -12,6 +12,7 @@ custom:
     - If: '"${self:custom.isOffline}" != "true"'
       Exclude:
         - functions.endpoint.handler
+        - provider.environment.CODESPACE_NAME
       ElseExclude:
         - functions.endpoint.image
 
@@ -19,9 +20,13 @@ provider:
   name: aws
   region: eu-central-1
 
-  enviroment:
-    
-
+  environment:
+    CODESPACE_NAME: ${env:CODESPACE_NAME, ""}
+    ENDPOINT_URL_ORIGIN: ${env:ENDPOINT_URL_ORIGIN, ""}
+    ENDPOINT_URL_AUTHENTICATION: ${env:ENDPOINT_URL_AUTHENTICATION, ""}
+    ENDPOINT_URL_EMAIL: ${env:ENDPOINT_URL_EMAIL, ""}
+    ENDPOINT_URL_IAM: ${env:ENDPOINT_URL_IAM, ""}
+    ENDPOINT_URL_REGISTRATION: ${env:ENDPOINT_URL_REGISTRATION, ""}
   ecr:
     images:
       appimage:
