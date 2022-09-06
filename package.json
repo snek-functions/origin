@@ -7,16 +7,20 @@
   "author": "snek-at",
   "dependencies": {
     "@snek-at/functions": "*",
-    "@snek-functions/authentication": "*"
+    "@snek-functions/authentication": "*",
+    "@snek-functions/email": "*",
+    "@snek-functions/registration": "*"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.9",
     "nodemon": "^2.0.19",
     "serverless": "^3.19.0",
     "serverless-offline": "^9.2.6",
     "serverless-plugin-ifelse": "^1.0.7"
   },
   "scripts": {
-    "start": "sf build -f . && IS_OFFLINE=true nodemon --watch dist --exec sls offline",
+    "build": "sf build -f .",
+    "start": "sf build -f . && IS_OFFLINE=true nodemon --watch dist --exec sls offline --httpPort 4010 --lambdaPort 4012",
     "deploy": "sls deploy",
     "postinstall": "sf install"
   },
