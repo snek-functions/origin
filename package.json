@@ -9,6 +9,7 @@
     "@snek-at/functions": "*",
     "@snek-functions/authentication": "*",
     "@snek-functions/email": "*",
+    "@snek-functions/iam": "*",
     "@snek-functions/registration": "*"
   },
   "devDependencies": {
