@@ -1,7 +1,13 @@
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
+import {userGet} from '@snek-functions/iam'
 import {SHARED_SECRET} from '../../constants.js'
-import {AccessTokenPayload, NewAccessToken, NewRefreshToken} from './types'
+import {
+  AccessTokenPayload,
+  NewAccessToken,
+  NewRefreshToken,
+  UserDataToken
+} from './types'
 
 export const verify = (token: string) => {
   return jwt.verify(token, SHARED_SECRET) as AccessTokenPayload
@@ -115,4 +121,19 @@ export const refreshTokens = (payload: {
     accessToken: accessToken,
     refreshToken: refreshToken
   }
+}
+
+export const newUserDataToken = async ({userId}) => {
+  const {data: user_data, errors} = await userGet.execute({
+    userId
+  })
+
+  const userDataToken: UserDataToken = {
+    username: user_data.username ?? 'default',
+    firstname: user_data.firstName ?? 'default',
+    lastname: user_data.lastName ?? 'default',
+    email: user_data.email ?? 'default@gmail.com'
+  }
+
+  return JSON.stringify(userDataToken)
 }
