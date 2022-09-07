@@ -5,7 +5,6 @@ import {
   TOKEN_COOKIE_NAME,
   USER_DATA_TOKEN_NAME
 } from '../constants.js'
-import {UserDataToken} from '../internal/token/types.js'
 
 const loginRequired: Decorator = async (args, _, {req, res}) => {
   const {generateInternalToken, setAuthenticationCookies} = await import(
@@ -22,7 +21,7 @@ const loginRequired: Decorator = async (args, _, {req, res}) => {
 
   let accessToken: string
   let refreshToken: string
-  let userDataToken: UserDataToken
+  let userDataToken: string
 
   try {
     verify(tokenCookie)
@@ -48,7 +47,7 @@ const loginRequired: Decorator = async (args, _, {req, res}) => {
       })
 
       setAuthenticationCookies(res, accessToken, refreshToken)
-      setUserCookie(res, userDataToken)
+      setUserCookie(req, res, userDataToken)
     } catch {
       throw new Error('Unable to authenticate')
     }
