@@ -1,10 +1,9 @@
 import {authenticate} from '@snek-functions/authentication'
 
 import {fn} from './factory'
-import {UserDataToken} from './internal/token/types.js'
 
 const login = fn<{username: string; password: string}, void>(
-  async (args, _, {res}) => {
+  async (args, _, {req, res}) => {
     const {newAccessToken, newRefreshToken, newUserDataToken} = await import(
       './internal/token/factory.js'
     )
@@ -38,7 +37,7 @@ const login = fn<{username: string; password: string}, void>(
       })
 
       setAuthenticationCookies(res, accessToken, refreshToken)
-      setUserCookie(res, userDataToken)
+      setUserCookie(req, res, userDataToken)
     }
   },
   {
