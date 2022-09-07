@@ -24,7 +24,7 @@ export async function proxyRequest(
 }
 
 function isWhitelisted(input: RequestInfo | URL) {
-  const FETCH_PROXY_WHITELIST = ['https://api.github.com']
+  const FETCH_PROXY_WHITELIST = ['https://api.github.com', 'https://photonq.at']
 
   const url = input.toString()
   if (!FETCH_PROXY_WHITELIST.some(whitelist => url.startsWith(whitelist))) {
