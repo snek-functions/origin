@@ -1,4 +1,4 @@
-import {JwtPayload} from 'jsonwebtoken'
+import type {JwtPayload} from 'jsonwebtoken'
 
 type ResourcesScope = {
   [key: string]: ResourceScope
@@ -25,4 +25,11 @@ export interface NewRefreshToken {
   accessToken: string
   scope: AuthorizationScope
   durration?: string
+}
+
+export interface UserDataToken {
+  username: string
+  firstname: string
+  lastname: string
+  email: string
 }

@@ -1,18 +1,28 @@
 import {Decorator} from '@snek-at/functions'
 
-import {REFRESH_TOKEN_COOKIE_NAME, TOKEN_COOKIE_NAME} from '../constants.js'
+import {
+  REFRESH_TOKEN_COOKIE_NAME,
+  TOKEN_COOKIE_NAME,
+  USER_DATA_TOKEN_NAME
+} from '../constants.js'
+import {UserDataToken} from '../internal/token/types.js'
 
 const loginRequired: Decorator = async (args, _, {req, res}) => {
   const {generateInternalToken, setAuthenticationCookies} = await import(
     '../helper/auth.js'
   )
-  const {refreshTokens, verify} = await import('../internal/token/factory.js')
+  const {setUserCookie} = await import('../helper/user.js')
+  const {refreshTokens, verify, newUserDataToken} = await import(
+    '../internal/token/factory.js'
+  )
 
   let tokenCookie = req.cookies[TOKEN_COOKIE_NAME]
   let refreshCookie = req.cookies[REFRESH_TOKEN_COOKIE_NAME]
+  let userDataCookie = req.cookies[USER_DATA_TOKEN_NAME]
 
   let accessToken: string
   let refreshToken: string
+  let userDataToken: UserDataToken
 
   try {
     verify(tokenCookie)
@@ -22,8 +32,7 @@ const loginRequired: Decorator = async (args, _, {req, res}) => {
     // If the token is invalid, we need to refresh it
 
     try {
-      verify(refreshCookie)
-
+      const data = verify(refreshCookie)
       refreshToken = refreshCookie
 
       const newTokens = refreshTokens({
@@ -34,7 +43,12 @@ const loginRequired: Decorator = async (args, _, {req, res}) => {
       accessToken = newTokens.accessToken
       refreshToken = newTokens.refreshToken
 
+      userDataToken = await newUserDataToken({
+        userId: data.sub
+      })
+
       setAuthenticationCookies(res, accessToken, refreshToken)
+      setUserCookie(res, userDataToken)
     } catch {
       throw new Error('Unable to authenticate')
     }

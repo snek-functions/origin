@@ -3,6 +3,7 @@ import {url} from './factory'
 export const SHARED_SECRET = '<your-service-secret>'
 export const TOKEN_COOKIE_NAME = 'T'
 export const REFRESH_TOKEN_COOKIE_NAME = 'RT'
+export const USER_DATA_TOKEN_NAME = 'U'
 
 export const LOGIN_COOKIE_SECURE = true
 export const LOGIN_COOKIE_SAME_SITE = 'none'

@@ -3,12 +3,16 @@
   "version": "0.0.9",
   "main": "dist/index.js",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "description": "Generated with `snek-functions init`",
   "author": "snek-at",
   "dependencies": {
     "@snek-at/functions": "*",
     "@snek-functions/authentication": "*",
     "@snek-functions/email": "*",
+    "@snek-functions/iam": "*",
     "@snek-functions/registration": "*"
   },
   "devDependencies": {
