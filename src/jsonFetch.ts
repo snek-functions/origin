@@ -14,7 +14,7 @@ export interface FetchResponse {
   }
 }
 
-const jsonFetch = fn<Parameters<typeof fetch>, FetchResponse>(
+const jsonFetch = fn<[RequestInfo, string], FetchResponse>(
   async (fetchParams, _, {req, res}) => {
     const {proxyRequest} = await import('./helper/proxy.js')
 
@@ -30,8 +30,6 @@ const jsonFetch = fn<Parameters<typeof fetch>, FetchResponse>(
       url: proxiedRes.url,
       json: await proxiedRes.json()
     }
-
-    console.log(req.headers)
 
     return responseData
   },
