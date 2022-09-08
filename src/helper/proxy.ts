@@ -3,10 +3,15 @@ import {Request} from 'express'
 import {withAuthorizationHeader} from './withAuthorizationHeader.js'
 
 export async function proxyRequest(
-  fetchParams: Parameters<typeof fetch>,
+  fetchParams: [RequestInfo, string | undefined],
   req: Request
 ) {
-  const [input, init] = fetchParams
+  const [input, initStr] = fetchParams
+
+  const init = (initStr ? JSON.parse(initStr) : undefined) as
+    | RequestInit
+    | undefined
+
   const headers: Headers = new Headers(init?.headers)
 
   withAuthorizationHeader(req, headers)
