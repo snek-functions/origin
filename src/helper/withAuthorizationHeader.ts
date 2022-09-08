@@ -4,6 +4,6 @@ export function withAuthorizationHeader(req: Request, headers: Headers) {
   const value = req.headers.authorization
 
   if (value) {
-    headers.append('Authorization', value)
+    headers.set('Authorization', value)
   }
 }

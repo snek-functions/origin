@@ -20,6 +20,8 @@ export async function proxyRequest(
     throw new Error(`URL is not whitelisted`)
   }
 
+  console.log(init, headers)
+
   const fetchRes = await fetch(input, {
     ...init,
     headers
