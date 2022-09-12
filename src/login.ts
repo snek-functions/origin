@@ -4,9 +4,11 @@ import {fn} from './factory'
 
 const login = fn<{username: string; password: string}, void>(
   async (args, _, {req, res}) => {
-    const {newAccessToken, newRefreshToken, newUserDataToken} = await import(
+    const {newAccessToken, newRefreshToken} = await import(
       './internal/token/factory.js'
     )
+
+    const {newUserDataToken} = await import('./helper/newUserDataToken.js')
     const {setAuthenticationCookies} = await import('./helper/auth.js')
     const {setUserCookie} = await import('./helper/user.js')
 

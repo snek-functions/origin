@@ -26,10 +26,3 @@ export interface NewRefreshToken {
   scope: AuthorizationScope
   durration?: string
 }
-
-export interface UserDataToken {
-  username: string
-  firstname: string
-  lastname: string
-  email: string
-}
