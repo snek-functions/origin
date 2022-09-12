@@ -9,7 +9,7 @@ import {
 export function setUserCookie(req: Request, res: Response, userDataToken: any) {
   res.cookie(USER_DATA_TOKEN_NAME, userDataToken, {
     ...COOKIE_OPTIONS,
-    domain: req.headers.origin,
+    // domain: new URL(req.headers.origin).hostname,
     maxAge: LOGIN_TOKEN_COOKIE_MAX_AGE * 1000,
     httpOnly: false
   })
