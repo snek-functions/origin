@@ -1,7 +1,7 @@
-FROM node:16
+FROM node:18.8.0-slim
 
 LABEL description="This container serves as an entry point for our future Snek Function projects."
-LABEL org.opencontainers.image.source="https://github.com/snek-at/origin"
+LABEL org.opencontainers.image.source="https://github.com/snek-functions/origin"
 LABEL maintainer="team@snek.at"
 
 ENV LAMBDA_TASK_ROOT=/var/task \

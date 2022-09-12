@@ -2,13 +2,13 @@ import {ConfigureApp} from '@snek-at/functions'
 import getServerlessApp from '@snek-at/functions/dist/server/getServerlessApp.js'
 import {register} from '@snek-functions/registration'
 import cors from 'cors'
+import express from 'express'
 import {setAuthenticationCookies} from './helper/auth.js'
 import {
   newAccessToken,
   newRefreshToken,
   verify
 } from './internal/token/factory.js'
-import {AccessTokenPayload} from './internal/token/types.js'
 
 export const configureApp: ConfigureApp = app => {
   app.use((req, res, next) => {
@@ -18,37 +18,47 @@ export const configureApp: ConfigureApp = app => {
     })(req, res, next)
   })
 
+  app.use(express.urlencoded())
+
   app.use('/submit', async (req, res) => {
-    let AccessTokenData: AccessTokenPayload
     try {
-      AccessTokenData = verify(req.query.token.toString())
-    } catch {
-      // If the token is invalid, we need to refresh it
-      throw new Error('Unable to verify')
-    }
-    const registerRes = await register.execute(AccessTokenData.data)
+      console.log(JSON.stringify(req.query))
+      const accessTokenData = verify(req.query.token.toString())
 
-    if (registerRes.errors.length > 0) {
-      res.redirect(403, 'https://photonq.at/signup')
-      throw new Error(registerRes.errors[0].message)
-    } else {
-      const scope = {
-        res1: ['read', 'write'],
-        res2: ['read', 'write']
+      const registerRes = await register.execute(accessTokenData.data)
+
+      console.log(registerRes.data)
+
+      if (registerRes.errors.length === 0) {
+        const scope = {
+          res1: ['read', 'write'],
+          res2: ['read', 'write']
+        }
+        const {accessToken} = newAccessToken({
+          subject: registerRes.data.userId.toString(),
+          scope
+        })
+
+        const {refreshToken} = newRefreshToken({
+          accessToken: accessToken,
+          scope
+        })
+
+        setAuthenticationCookies(res, accessToken, refreshToken)
+
+        res.redirect(301, 'https://photonq.at/login?verify=true')
+      } else {
+        res.redirect(
+          403,
+          `https://photonq.at/signup?error={"code":"002","msg":${registerRes.errors[0].message}}`
+        )
       }
-      const {accessToken} = newAccessToken({
-        subject: registerRes.data.userId.toString(),
-        scope
-      })
-
-      const {refreshToken} = newRefreshToken({
-        accessToken: accessToken,
-        scope
-      })
-
-      setAuthenticationCookies(res, accessToken, refreshToken)
-
-      res.redirect(301, 'https://photonq.at/login?verify=true')
+    } catch (e) {
+      console.log(e)
+      res.redirect(
+        403,
+        `https://photonq.at/signup?error={"code":"001","msg":"Invalid token"}`
+      )
     }
   })
 }

@@ -1,4 +1,5 @@
 import {send} from '@snek-functions/email'
+import {signupEmail} from './email/signupEmail'
 import {fn, url} from './factory'
 
 const signup = fn<
@@ -19,17 +20,19 @@ const signup = fn<
     const {accessToken} = newAccessToken({
       subject: '0',
       data: args,
-      scope
+      scope,
+      durration: '30d'
     })
 
     const emailRes = await send.execute({
       email: args.email,
-      subject: 'Confirm Signup',
-      msg: `Please follow the link to complete your registration: 
-        <a href="${url.replace(
-          '/graphql',
-          '/submit'
-        )}?token=${accessToken}" target="_blank">Confirm Registration</a>`
+      subject: 'Confirm your Registration at PhotonQ',
+      msg: signupEmail(
+        url,
+        accessToken,
+        args.details.firstName,
+        args.details.lastName
+      )
     })
 
     if (emailRes.errors.length > 0) {

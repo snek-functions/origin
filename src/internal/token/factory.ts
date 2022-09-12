@@ -1,6 +1,6 @@
+import {userGet} from '@snek-functions/iam'
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
-import {userGet} from '@snek-functions/iam'
 import {SHARED_SECRET} from '../../constants.js'
 import {
   AccessTokenPayload,
