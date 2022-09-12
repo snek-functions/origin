@@ -1,23 +1,18 @@
 import {Decorator} from '@snek-at/functions'
 
-import {
-  REFRESH_TOKEN_COOKIE_NAME,
-  TOKEN_COOKIE_NAME,
-  USER_DATA_TOKEN_NAME
-} from '../constants.js'
+import {REFRESH_TOKEN_COOKIE_NAME, TOKEN_COOKIE_NAME} from '../constants.js'
 
 const loginRequired: Decorator = async (args, _, {req, res}) => {
   const {generateInternalToken, setAuthenticationCookies} = await import(
     '../helper/auth.js'
   )
+
+  const {newUserDataToken} = await import('../helper/newUserDataToken.js')
   const {setUserCookie} = await import('../helper/user.js')
-  const {refreshTokens, verify, newUserDataToken} = await import(
-    '../internal/token/factory.js'
-  )
+  const {refreshTokens, verify} = await import('../internal/token/factory.js')
 
   let tokenCookie = req.cookies[TOKEN_COOKIE_NAME]
   let refreshCookie = req.cookies[REFRESH_TOKEN_COOKIE_NAME]
-  let userDataCookie = req.cookies[USER_DATA_TOKEN_NAME]
 
   let accessToken: string
   let refreshToken: string
