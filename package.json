@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "main": "dist/index.js",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/index.d.ts",
   "type": "module",
   "description": "Generated with `snek-functions init`",
   "author": "snek-at",
