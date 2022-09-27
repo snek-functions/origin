@@ -2,6 +2,7 @@
   "name": "@snek-functions/origin",
   "version": "0.0.13",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "files": [
     "dist"
