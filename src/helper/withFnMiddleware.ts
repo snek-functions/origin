@@ -1,11 +1,13 @@
-import {SnekFunction} from '@snek-at/functions/dist/types'
 import {Request} from 'express'
+
+import {BaseFunctionArgs, SnekFunction} from '@snek-at/functions/dist/types'
+
 import {withAuthorizationHeader} from './withAuthorizationHeader'
 
-export function withFnMiddleware<FunctionArgs, FunctionReturn>(
-  fn: SnekFunction<FunctionArgs, FunctionReturn>,
-  req: Request
-) {
+export function withFnMiddleware<
+  FunctionArgs extends BaseFunctionArgs,
+  FunctionReturn
+>(fn: SnekFunction<FunctionArgs, FunctionReturn>, req: Request) {
   const headers = new Headers()
 
   withAuthorizationHeader(req, headers)

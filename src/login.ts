@@ -34,9 +34,7 @@ const login = fn<{username: string; password: string}, void>(
         scope
       })
 
-      const userDataToken = await newUserDataToken({
-        userId: data.user_id
-      })
+      const userDataToken = await newUserDataToken(data.user_id)
 
       setAuthenticationCookies(res, accessToken, refreshToken)
       setUserCookie(req, res, userDataToken)
