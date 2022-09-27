@@ -37,9 +37,7 @@ const loginRequired: Decorator = async (args, _, {req, res}) => {
       accessToken = newTokens.accessToken
       refreshToken = newTokens.refreshToken
 
-      userDataToken = await newUserDataToken({
-        userId: data.sub
-      })
+      userDataToken = await newUserDataToken(data.sub!)
 
       setAuthenticationCookies(res, accessToken, refreshToken)
       setUserCookie(req, res, userDataToken)

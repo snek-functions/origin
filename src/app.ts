@@ -1,8 +1,10 @@
+import cors from 'cors'
+import express from 'express'
+
 import {ConfigureApp} from '@snek-at/functions'
 import getServerlessApp from '@snek-at/functions/dist/server/getServerlessApp.js'
 import {register} from '@snek-functions/registration'
-import cors from 'cors'
-import express from 'express'
+
 import {setAuthenticationCookies} from './helper/auth.js'
 import {
   newAccessToken,
@@ -23,7 +25,14 @@ export const configureApp: ConfigureApp = app => {
   app.use('/submit', async (req, res) => {
     try {
       console.log(JSON.stringify(req.query))
-      const accessTokenData = verify(req.query.token.toString())
+
+      const token = req?.query?.token?.toString()
+
+      if (!token) {
+        throw new Error('No token provided')
+      }
+
+      const accessTokenData = verify(token)
 
       const registerRes = await register.execute(accessTokenData.data)
 
@@ -63,7 +72,7 @@ export const configureApp: ConfigureApp = app => {
   })
 }
 
-export async function handler(event, context) {
+export async function handler(event: Object, context: Object) {
   return await getServerlessApp({
     functions: '.'
   })(event, context)
