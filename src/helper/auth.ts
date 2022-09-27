@@ -1,5 +1,4 @@
 import {Response} from 'express'
-import {newAccessToken, verify} from '../internal/token/factory.js'
 
 import {
   COOKIE_OPTIONS,
@@ -8,6 +7,7 @@ import {
   REFRESH_TOKEN_COOKIE_NAME,
   TOKEN_COOKIE_NAME
 } from '../constants.js'
+import {newAccessToken, verify} from '../internal/token/factory.js'
 
 export function setAuthenticationCookies(
   res: Response,
@@ -33,9 +33,17 @@ export function generateInternalToken({
 }) {
   const parts = verify(accessToken)
 
+  let internalScope
+
+  if (Array.isArray(parts.scope)) {
+    internalScope = parts.scope
+  } else {
+    internalScope = parts.scope[ressourceId]
+  }
+
   const {accessToken: limitedAccessToken} = newAccessToken({
     subject: parts.sub,
-    scope: parts.scope[ressourceId]
+    scope: internalScope
   })
 
   return `Bearer ${limitedAccessToken}`
