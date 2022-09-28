@@ -2,7 +2,7 @@ FROM node:18.8.0-slim
 
 LABEL description="This container serves as an entry point for our future Snek Function projects."
 LABEL org.opencontainers.image.source="https://github.com/snek-functions/origin"
-LABEL maintainer="team@snek.at"
+LABEL maintainer="opensource@snek.at"
 
 ENV LAMBDA_TASK_ROOT=/var/task \
     SNEK_FUNCTIONS_BUILD_DIR=/tmp/snek-functions
@@ -38,3 +38,6 @@ ENTRYPOINT [ "./entrypoint.sh" ]
 
 # Start in serverless mode
 #CMD [ "app.handler" ]
+
+# SPDX-License-Identifier: (EUPL-1.2)
+# Copyright © 2022 snek.at
