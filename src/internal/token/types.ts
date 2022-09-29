@@ -8,21 +8,35 @@ type ResourceScope = string[]
 
 export type AuthorizationScope = ResourcesScope | ResourceScope
 
-export interface AccessTokenPayload extends JwtPayload {
-  scope: AuthorizationScope
-  fresh: boolean
-}
+export type TokenTypes =
+  | 'access'
+  | 'refresh'
+  | 'password_reset'
+  | 'email_verification'
 
-export interface NewAccessToken {
-  subject?: string
-  scope: AuthorizationScope
-  durration?: string
-  fresh?: boolean
+export interface TokenPayload extends JwtPayload {
+  scope: any
   data?: object
+  type?: TokenTypes
 }
 
-export interface NewRefreshToken {
-  accessToken: string
-  scope: AuthorizationScope
+export interface Token {
+  payload: TokenPayload
+  subject?: string
   durration?: string
+}
+
+export interface NewAccessToken extends Token {
+  payload: TokenPayload & {
+    fresh?: boolean
+    scope: AuthorizationScope
+  }
+}
+
+export interface NewRefreshToken extends Token {
+  accessToken: string
+  payload: TokenPayload & {
+    scope: AuthorizationScope
+    durration?: string
+  }
 }
