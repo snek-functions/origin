@@ -2,27 +2,31 @@ import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
 
 import {SHARED_SECRET} from '../../constants.js'
-import {AccessTokenPayload, NewAccessToken, NewRefreshToken} from './types'
+import {
+  NewAccessToken,
+  NewRefreshToken,
+  Token,
+  TokenPayload,
+  TokenTypes
+} from './types'
 
 export const verify = (token: string) => {
-  return jwt.verify(token, SHARED_SECRET) as AccessTokenPayload
+  return jwt.verify(token, SHARED_SECRET) as TokenPayload
 }
 
-export const newAccessToken = ({
-  subject,
-  scope,
-  durration = '5m',
-  fresh = false,
-  data
-}: NewAccessToken) => {
-  let jwtId: string = crypto.randomUUID()
+export const newToken = (
+  {payload, subject, durration}: Token,
+  type: TokenTypes,
+  options: {
+    jwtid?: string
+  } = {}
+) => {
+  options.jwtid = options?.jwtid || crypto.randomUUID()
 
-  let accessToken: string = jwt.sign(
+  const token = jwt.sign(
     {
-      scope: scope,
-      fresh: !!fresh,
-      type: 'access',
-      data: data
+      ...payload,
+      type
     },
     SHARED_SECRET,
     {
@@ -38,55 +42,46 @@ export const newAccessToken = ({
       // Identifies principal that issued the JWT
       issuer: 'snek-0',
       // Case-sensitive unique identifier of the token even among different issuers
-      jwtid: jwtId,
+      jwtid: options.jwtid,
       audience: ''
     }
   )
 
   return {
-    accessToken,
-    jwtId
+    jwtid: options.jwtid,
+    token
   }
+}
+
+export const newAccessToken = ({
+  subject,
+  payload,
+  durration = '5m'
+}: NewAccessToken) => {
+  return newToken({payload, subject, durration}, 'access')
 }
 
 export const newRefreshToken = ({
   accessToken,
-  scope,
+  payload,
   durration = '30d'
 }: NewRefreshToken) => {
   // verify a token symmetric
-  const {sub, jti} = jwt.verify(
-    accessToken,
-    SHARED_SECRET
-  ) as AccessTokenPayload
+  const {sub, jti} = verify(accessToken)
 
-  let refreshToken: string = jwt.sign(
+  const refreshToken = newToken(
     {
-      type: 'refresh',
-      scope: scope
-    },
-    SHARED_SECRET,
-    {
-      // The issuer can freely set an algorithm to verify the signature on the token. However, some supported algorithms are insecure
-      // HMAC using SHA-256 hash algorithm
-      algorithm: 'HS256',
-
-      // Identifies the subject of the JWT
+      payload,
       subject: sub,
-      // Identifies the expiration time on and after which the JWT must not be accepted for processing. The value must be in seconds or a string describing a time span vercel/ms
-      expiresIn: durration,
-
-      // Identifies principal that issued the JWT
-      issuer: 'snek-0',
-      // Case-sensitive unique identifier of the token even among different issuers
+      durration
+    },
+    'refresh',
+    {
       jwtid: jti
     }
   )
 
-  return {
-    refreshToken,
-    jwtId: jti
-  }
+  return refreshToken
 }
 
 export const refreshTokens = (payload: {
@@ -94,21 +89,22 @@ export const refreshTokens = (payload: {
   durration?: string
 }) => {
   // verify a token symmetric
-  const decodedRefreshToken = jwt.verify(
-    payload.refreshToken,
-    SHARED_SECRET
-  ) as AccessTokenPayload
+  const decodedRefreshToken = verify(payload.refreshToken)
 
-  const {accessToken} = newAccessToken({
+  const accessToken = newAccessToken({
     subject: decodedRefreshToken.sub || 'unkown',
-    scope: decodedRefreshToken.scope,
-    durration: payload.durration,
-    fresh: false
+    payload: {
+      scope: decodedRefreshToken.scope,
+      fresh: false
+    },
+    durration: payload.durration
   })
 
-  const {refreshToken} = newRefreshToken({
-    accessToken: accessToken,
-    scope: decodedRefreshToken.scope,
+  const refreshToken = newRefreshToken({
+    accessToken: accessToken.token,
+    payload: {
+      scope: decodedRefreshToken.scope
+    },
     durration: payload.durration
   })
 

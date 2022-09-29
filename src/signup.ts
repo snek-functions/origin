@@ -1,44 +1,48 @@
-import { send2fa } from "@snek-functions/email";
-import { fn, url } from "./factory";
+import {send2fa} from '@snek-functions/email'
+
+import {fn, url} from './factory'
 
 const signup = fn<
   {
-    email: string;
-    password: string;
-    details: { firstName: string; lastName: string };
+    email: string
+    password: string
+    details: {firstName: string; lastName: string}
   },
   void
 >(
-  async (args, _, { res }) => {
-    const { newAccessToken } = await import("./internal/token/factory.js");
+  async (args, _, {res}) => {
+    const {newToken} = await import('./internal/token/factory.js')
     const scope = {
-      res1: ["read", "write"],
-      res2: ["read", "write"],
-    };
+      res1: ['read', 'write'],
+      res2: ['read', 'write']
+    }
 
-    const { accessToken } = newAccessToken({
-      subject: "0",
-      data: args,
-      scope,
-      durration: "30d",
-    });
+    const {token} = newToken({
+      subject: '0',
+      payload: {
+        data: args,
+        scope
+      },
+
+      durration: '30d'
+    }, 'email_verification')
 
     const emailRes = await send2fa.execute({
       email: args.email,
-      subject: "Confirm your Registration at PhotonQ",
-      link: `${url.replace("/graphql", "/submit")}?token=${accessToken}`,
+      subject: 'Confirm your Registration at PhotonQ',
+      link: `${url.replace('/graphql', '/submit')}?token=${token}`,
       firstName: args.details.firstName,
-      lastName: args.details.lastName,
-    });
+      lastName: args.details.lastName
+    })
 
     if (emailRes.errors.length > 0) {
-      throw new Error(emailRes.errors[0].message);
+      throw new Error(emailRes.errors[0].message)
     }
   },
   {
-    name: "signup",
-    decorators: [],
+    name: 'signup',
+    decorators: []
   }
-);
+)
 
-export default signup;
+export default signup
