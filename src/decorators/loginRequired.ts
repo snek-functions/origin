@@ -34,8 +34,8 @@ const loginRequired: Decorator = async (args, _, {req, res}) => {
         durration: '30d'
       })
 
-      accessToken = newTokens.accessToken
-      refreshToken = newTokens.refreshToken
+      accessToken = newTokens.accessToken.token
+      refreshToken = newTokens.refreshToken.token
 
       userDataToken = await newUserDataToken(data.sub!)
 
