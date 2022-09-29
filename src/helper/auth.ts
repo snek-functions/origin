@@ -1,4 +1,4 @@
-import {Response} from 'express'
+import {Request, Response} from 'express'
 
 import {
   COOKIE_OPTIONS,
@@ -7,7 +7,42 @@ import {
   REFRESH_TOKEN_COOKIE_NAME,
   TOKEN_COOKIE_NAME
 } from '../constants.js'
-import {newAccessToken, verify} from '../internal/token/factory.js'
+import {
+  newAccessToken,
+  newRefreshToken,
+  verify
+} from '../internal/token/factory.js'
+
+/**
+ * Temporary scope until real auth2 is implemented.
+ */
+const scope = {
+  res1: ['read', 'write'],
+  res2: ['read', 'write']
+}
+
+export function setAuthentication(userId: string, res: Response) {
+  const accessToken = newAccessToken({
+    subject: userId,
+    payload: {
+      scope
+    }
+  })
+
+  const refreshToken = newRefreshToken({
+    accessToken: accessToken.token,
+    payload: {
+      scope
+    }
+  })
+
+  setAuthenticationCookies(res, accessToken.token, refreshToken.token)
+
+  return {
+    accessToken: accessToken.token,
+    refreshToken: refreshToken.token
+  }
+}
 
 export function setAuthenticationCookies(
   res: Response,
@@ -22,6 +57,23 @@ export function setAuthenticationCookies(
     ...COOKIE_OPTIONS,
     maxAge: LOGIN_REFRESH_TOKEN_COOKIE_MAX_AGE * 1000
   })
+}
+
+export function getAuthentication(req: Request) {
+  const accessToken = req.cookies[TOKEN_COOKIE_NAME]
+  const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE_NAME]
+
+  const {sub} = verify(accessToken)
+
+  if (!sub) {
+    throw new Error('No subject found in access token')
+  }
+
+  return {
+    userId: sub,
+    accessToken,
+    refreshToken
+  }
 }
 
 export function generateInternalToken({
@@ -41,9 +93,11 @@ export function generateInternalToken({
     internalScope = parts.scope[ressourceId]
   }
 
-  const {accessToken: limitedAccessToken} = newAccessToken({
+  const {token: limitedAccessToken} = newAccessToken({
     subject: parts.sub,
-    scope: internalScope
+    payload: {
+      scope: internalScope
+    }
   })
 
   return `Bearer ${limitedAccessToken}`
