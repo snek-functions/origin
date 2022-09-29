@@ -1,10 +1,14 @@
+# JavaScript / TypeScript
 node_modules
 dist
 yarn-error.log
 tsconfig.tsbuildinfo
+yarn.lock
+package-lock.json
 
+# Environment
 .env
 .env.*
 
-# Serverless directories
+# Serverless
 .serverless/
