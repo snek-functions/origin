@@ -61,6 +61,10 @@ export const configureApp: ConfigureApp = app => {
           // get password from body
           const password = req.body.password
 
+          if (!password) {
+            throw new Error('No password provided')
+          }
+
           if (!sub) {
             throw new Error('No user id provided')
           }
@@ -74,8 +78,6 @@ export const configureApp: ConfigureApp = app => {
 
           res.redirect(301, 'https://photonq.at/login?reset=true')
         }
-
-        res.redirect(301, `https://photonq.at/reset?token=${token}`)
       }
     } catch (e) {
       res.redirect(
