@@ -77,6 +77,9 @@ export const configureApp: ConfigureApp = app => {
           setAuthentication(sub, res)
 
           res.redirect(301, 'https://photonq.at/login?reset=true')
+        } else {
+          res.set('Allow', 'POST')
+          res.status(405).send('Method Not Allowed')
         }
       }
     } catch (e) {
