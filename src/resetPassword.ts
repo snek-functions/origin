@@ -1,8 +1,6 @@
 import {send} from '@snek-functions/email'
-import {usersUpdate} from '@snek-functions/iam'
 
 import {fn, url} from './factory'
-import {setAuthentication} from './helper/auth.js'
 
 // Maybe this should be split into two functions
 const resetPassword = fn<
@@ -21,6 +19,7 @@ const resetPassword = fn<
     {req, res}
   ) => {
     const {newToken, verify} = await import('./internal/token/factory.js')
+    const {setAuthentication} = await import('./helper/auth.js')
 
     const {userGet} = await import('@snek-functions/iam')
 
@@ -28,6 +27,7 @@ const resetPassword = fn<
       const {sub, type} = verify(args.token)
 
       if (type === 'password_reset') {
+        const {usersUpdate} = await import('@snek-functions/iam')
         if (!sub) {
           throw new Error('No user id provided')
         }
