@@ -59,7 +59,7 @@ export const configureApp: ConfigureApp = app => {
         // check if request is post
         if (req.method === 'POST') {
           // get password from body
-          const password = req.body.password
+          const password = req.body?.password
 
           if (!password) {
             throw new Error('No password provided')
@@ -83,10 +83,12 @@ export const configureApp: ConfigureApp = app => {
         }
       }
     } catch (e) {
-      res.redirect(
-        403,
-        `https://photonq.at/signup?error={"code":"001","msg":"Invalid token"}`
-      )
+      if (e instanceof Error) {
+        res.redirect(
+          403,
+          `https://photonq.at/signup?error={"code":"001","msg":"${e.message}"}`
+        )
+      }
     }
   })
 }
