@@ -3,7 +3,6 @@ import express from 'express'
 
 import {ConfigureApp} from '@snek-at/functions'
 import getServerlessApp from '@snek-at/functions/dist/server/getServerlessApp.js'
-import {usersUpdate} from '@snek-functions/iam'
 import {register} from '@snek-functions/registration'
 
 import {setAuthentication} from './helper/auth.js'
@@ -54,32 +53,6 @@ export const configureApp: ConfigureApp = app => {
               `https://photonq.at/signup?error={"code":"002","msg":${e.message}}`
             )
           }
-        }
-      } else if (type === 'password_reset') {
-        // check if request is post
-        if (req.method === 'POST') {
-          // get password from body
-          const password = req.body?.password
-
-          if (!password) {
-            throw new Error('No password provided')
-          }
-
-          if (!sub) {
-            throw new Error('No user id provided')
-          }
-
-          await usersUpdate({
-            userId: sub,
-            password: password
-          })
-
-          setAuthentication(sub, res)
-
-          res.redirect(301, 'https://photonq.at/login?reset=true')
-        } else {
-          res.set('Allow', 'POST')
-          res.status(405).send('Method Not Allowed')
         }
       }
     } catch (e) {
