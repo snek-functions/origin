@@ -2,7 +2,7 @@ import {send} from '@snek-functions/email'
 import {usersUpdate} from '@snek-functions/iam'
 
 import {fn, url} from './factory'
-import {setAuthentication} from './helper/auth'
+import {setAuthentication} from './helper/auth.js'
 
 // Maybe this should be split into two functions
 const resetPassword = fn<
