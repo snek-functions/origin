@@ -1,6 +1,6 @@
-# repository-template
+# template
 
-This repository serves as an entry point for all my future projects.
+This repository serves as an entry point for all future snek-functions.
 
 SPDX-License-Identifier: (EUPL-1.2)
 Copyright © 2019-2022 snek.at
