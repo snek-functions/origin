@@ -1,26 +1,29 @@
-import {send2fa} from '@snek-functions/email'
+import { send2fa } from '@snek-functions/email'
+import { prepare } from '@snek-functions/registration'
 
-import {fn, url} from './factory'
+import { fn, url } from './factory'
 
 const signup = fn<
   {
     email: string
     password: string
-    details: {firstName: string; lastName: string}
+    details: { firstName: string; lastName: string }
   },
   void
 >(
-  async (args, _, {res}) => {
-    const {newToken} = await import('./internal/token/factory.js')
+  async (args, _, { res }) => {
+    const { newToken } = await import('./internal/token/factory.js')
     const scope = {
       res1: ['read', 'write'],
       res2: ['read', 'write']
     }
 
-    const {token} = newToken({
+    const preparedRegistrationData = await prepare({ args })
+
+    const { token } = newToken({
       subject: '0',
       payload: {
-        data: args,
+        data: preparedRegistrationData,
         scope
       },
 
