@@ -1,10 +1,12 @@
 {
-  "name": "@snek-functions/template",
-  "version": "0.0.1",
-  "private": true,
+  "name": "@snek-functions/origin",
+  "version": "0.0.19",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "description": "Generated with `snek-functions init`",
   "author": "snek-at",
   "config": {
@@ -13,11 +15,16 @@
     }
   },
   "dependencies": {
-    "@snek-at/functions": "*"
+    "@snek-at/functions": "*",
+    "@snek-functions/authentication": "*",
+    "@snek-functions/email": "*",
+    "@snek-functions/iam": "*",
+    "@snek-functions/registration": "*"
   },
   "devDependencies": {
     "commitizen": "^4.2.5",
     "git-cz": "^4.9.0",
+    "@types/jsonwebtoken": "^8.5.9",
     "nodemon": "^2.0.19",
     "serverless": "^3.19.0",
     "serverless-offline": "^9.2.6",
@@ -25,9 +32,13 @@
   },
   "scripts": {
     "build": "sf build -f . --declaration",
-    "start": "sf build -f . && IS_OFFLINE=true nodemon --watch dist --exec sls offline",
+    "start": "sf build -f . && IS_OFFLINE=true nodemon --watch dist --exec sls offline --httpPort 4010 --lambdaPort 4012",
     "deploy": "sls deploy",
     "postinstall": "sf install"
   },
-  "sfDependencies": {}
+  "sfDependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.9"
+  }
 }
