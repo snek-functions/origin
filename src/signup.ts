@@ -17,9 +17,9 @@ const signup = fn<
       res1: ['read', 'write'],
       res2: ['read', 'write']
     }
-
-    const preparedRegistrationData = await prepare({ args })
-
+    console.log(`registration email ${args.email}`)
+    const preparedRegistrationData = await prepare(args)
+    console.log(`prepared ${preparedRegistrationData}`)
     const { token } = newToken({
       subject: '0',
       payload: {
