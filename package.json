@@ -22,9 +22,9 @@
     "@snek-functions/registration": "*"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.9",
     "commitizen": "^4.2.5",
     "git-cz": "^4.9.0",
-    "@types/jsonwebtoken": "^8.5.9",
     "nodemon": "^2.0.19",
     "serverless": "^3.19.0",
     "serverless-offline": "^9.2.6",
