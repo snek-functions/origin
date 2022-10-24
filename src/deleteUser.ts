@@ -1,4 +1,4 @@
-import { sendPasswordReset } from '@snek-functions/email'
+import { sendDeleteUser } from '@snek-functions/email'
 
 import { fn, url } from './factory'
 
@@ -26,7 +26,7 @@ const deleteUser = fn<
     if (args.token) {
       const { sub, type } = verify(args.token)
 
-      if (type === 'password_reset') {
+      if (type === 'user_delete') {
         const { usersUpdate } = await import('@snek-functions/iam')
         if (!sub) {
           throw new Error('No user id provided')
@@ -56,12 +56,12 @@ const deleteUser = fn<
 
           durration: '5 minutes'
         },
-        'password_reset'
+        'user_delete'
       )
 
       console.log('token', token)
 
-      await sendPasswordReset({
+      await sendDeleteUser({
         email: args.email,
         subject: 'Delete user at PhotonQ',
         link: `${url.replace('/graphql', '/delete')}?token=${token}`,

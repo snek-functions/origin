@@ -11,6 +11,7 @@ export type AuthorizationScope = ResourcesScope | ResourceScope
 export type TokenTypes =
   | 'access'
   | 'refresh'
+  | 'user_delete'
   | 'password_reset'
   | 'email_verification'
 
