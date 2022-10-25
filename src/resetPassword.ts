@@ -1,4 +1,4 @@
-import { sendPasswordReset } from '@snek-functions/email'
+import { sendResetPassword } from '@snek-functions/email'
 
 import { fn, url } from './factory'
 
@@ -61,7 +61,7 @@ const resetPassword = fn<
 
       console.log('token', token)
 
-      await sendPasswordReset({
+      await sendResetPassword({
         email: args.email,
         subject: 'Reset your Password at PhotonQ',
         link: `${url.replace('/graphql', '/reset')}?token=${token}`,
