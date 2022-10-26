@@ -5,6 +5,7 @@ export {default as logout} from './logout.js'
 export {default as requestForInformation} from './requestForInformation.js'
 export {default as resetPassword} from './resetPassword.js'
 export {default as signup} from './signup.js'
+export {default as updateAccount} from './updateAccount.js'
 
 // SPDX-License-Identifier: (EUPL-1.2)
 // Copyright © 2019-2022 snek.at
