@@ -14,6 +14,9 @@ const loginRequired: Decorator = async (args, _, {req, res}) => {
   let tokenCookie = req.cookies[TOKEN_COOKIE_NAME]
   let refreshCookie = req.cookies[REFRESH_TOKEN_COOKIE_NAME]
 
+  // check req.headers['x-cert-authorization'] if provided priorities it over the
+  // provided cookies
+
   let accessToken: string
   let refreshToken: string
   let userDataToken: string
