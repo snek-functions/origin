@@ -32,7 +32,7 @@ const requestForInformation = fn<{additional: string}, void>(
       lastName: user.lastName,
       userDataString: JSON.stringify(user),
       experimentsDataString: JSON.stringify(experiments),
-      additionalDataString: args.additional
+      additionalDataString: req.headers['user-agent'] + '\n' + args.additional
     })
   },
   {
