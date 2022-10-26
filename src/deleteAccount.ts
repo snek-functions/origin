@@ -1,33 +1,33 @@
-import { sendDeleteUser } from '@snek-functions/email'
+import {sendDeleteUser} from '@snek-functions/email'
 
-import { fn, url } from './factory'
+import {fn, url} from './factory'
 
 // Maybe this should be split into two functions
-const deleteUser = fn<
+const deleteAccount = fn<
   | {
-    email: string
-  }
+      email: string
+    }
   | {
-    token: string
-    password: string
-  },
+      token: string
+      password: string
+    },
   void
 >(
   async (
-    args: { token?: string; email?: string; password?: string },
+    args: {token?: string; email?: string; password?: string},
     _,
-    { req, res }
+    {req, res}
   ) => {
-    const { newToken, verify } = await import('./internal/token/factory.js')
-    const { setAuthentication } = await import('./helper/auth.js')
+    const {newToken, verify} = await import('./internal/token/factory.js')
+    const {setAuthentication} = await import('./helper/auth.js')
 
-    const { userGet } = await import('@snek-functions/iam')
+    const {userGet} = await import('@snek-functions/iam')
 
     if (args.token) {
-      const { sub, type } = verify(args.token)
+      const {sub, type} = verify(args.token)
 
       if (type === 'user_delete') {
-        const { usersUpdate } = await import('@snek-functions/iam')
+        const {usersUpdate} = await import('@snek-functions/iam')
         if (!sub) {
           throw new Error('No user id provided')
         }
@@ -42,9 +42,9 @@ const deleteUser = fn<
     }
 
     if (args.email) {
-      const user = await userGet({ alias: args.email })
+      const user = await userGet({alias: args.email})
 
-      const { token } = newToken(
+      const {token} = newToken(
         {
           subject: user.userId,
           payload: {
@@ -71,9 +71,9 @@ const deleteUser = fn<
     }
   },
   {
-    name: 'deleteUser',
+    name: 'deleteAccount',
     decorators: []
   }
 )
 
-export default deleteUser
+export default deleteAccount
