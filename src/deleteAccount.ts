@@ -1,3 +1,4 @@
+import {authenticate} from '@snek-functions/authentication'
 import {sendDeleteUser} from '@snek-functions/email'
 
 import {fn, url} from './factory'
@@ -24,20 +25,29 @@ const deleteAccount = fn<
     const {userGet} = await import('@snek-functions/iam')
 
     if (args.token) {
-      const {sub, type} = verify(args.token)
+      const {data, type} = verify(args.token)
 
       if (type === 'user_delete') {
-        const {usersUpdate} = await import('@snek-functions/iam')
-        if (!sub) {
-          throw new Error('No user id provided')
+        const {usersDelete} = await import('@snek-functions/iam')
+
+        if (!data) {
+          throw new Error('No email provided')
         }
 
-        await usersUpdate({
-          userId: sub,
-          password: args.password
+        const email = (data as {email: string}).email
+
+        const {data: userData, errors} = await authenticate.execute({
+          username: email,
+          password: args.password || ''
         })
 
-        setAuthentication(sub, res)
+        if (errors.length > 0) {
+          throw new Error('Unable to find account')
+        }
+
+        await usersDelete({
+          userId: userData.user_id
+        })
       }
     }
 
