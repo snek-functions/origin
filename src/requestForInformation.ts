@@ -1,8 +1,7 @@
 import {sendUserInformation} from '@snek-functions/email'
-import loginRequired from './decorators/loginRequired'
-
+import loginRequired from './decorators/loginRequired.js'
 import {fn} from './factory'
-import {photonqCdlService} from './internal/photonq-cdl-service'
+import {photonqCdlService} from './internal/photonq-cdl-service/index.js'
 
 // Maybe this should be split into two functions
 const requestForInformation = fn<{additional: string}, void>(
