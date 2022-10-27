@@ -1,6 +1,6 @@
 {
   "name": "@snek-functions/origin",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -19,9 +19,12 @@
     "@snek-functions/authentication": "*",
     "@snek-functions/email": "*",
     "@snek-functions/iam": "*",
-    "@snek-functions/registration": "*"
+    "@snek-functions/registration": "*",
+    "cors": "^2.8.5",
+    "pinkie-promise": "^2.0.1"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.12",
     "@types/jsonwebtoken": "^8.5.9",
     "commitizen": "^4.2.5",
     "git-cz": "^4.9.0",

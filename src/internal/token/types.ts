@@ -14,6 +14,7 @@ export type TokenTypes =
   | 'user_delete'
   | 'password_reset'
   | 'email_verification'
+  | 'user_reactivate'
 
 export interface TokenPayload extends JwtPayload {
   scope: any
