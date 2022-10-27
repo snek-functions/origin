@@ -29,7 +29,7 @@ const handleLoginAttempts = async (alias: string, loginSuccess: boolean) => {
       isActive: false,
     });
 
-    const { newToken } = await import("./internal/token/factory");
+    const { newToken } = await import("./internal/token/factory.js");
 
     const { token } = newToken(
       {
