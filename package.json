@@ -1,6 +1,6 @@
 {
   "name": "@snek-functions/origin",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -20,6 +20,7 @@
     "@snek-functions/email": "*",
     "@snek-functions/iam": "*",
     "@snek-functions/registration": "*",
+    "@snek-functions/shopify": "*",
     "cors": "^2.8.5",
     "pinkie-promise": "^2.0.1"
   },
