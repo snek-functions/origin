@@ -22,8 +22,8 @@ provider:
 
   environment:
     CODESPACE_NAME: ${env:CODESPACE_NAME, ""}
-    ENDPOINT_URL_ORIGIN: ${env:ENDPOINT_URL_ORIGIN, ""}
-    ENDPOINT_URL_AUTHENTICATION: ${env:ENDPOINT_URL_AUTHENTICATION, ""}
+    ENDPOINT_URL_ORIGIN: ${env:ENDPOINT_URL_ORIGIN, "https://bf0xierewj.execute-api.eu-central-1.amazonaws.com/graphql"}
+    ENDPOINT_URL_AUTHENTICATION: 'https://6x576ano42.execute-api.eu-central-1.amazonaws.com/graphql'
     ENDPOINT_URL_EMAIL: ${env:ENDPOINT_URL_EMAIL, ""}
     ENDPOINT_URL_IAM: ${env:ENDPOINT_URL_IAM, ""}
     ENDPOINT_URL_REGISTRATION: ${env:ENDPOINT_URL_REGISTRATION, ""}
@@ -43,6 +43,5 @@ functions:
       - httpApi:
           path: '*'
           method: '*'
-
 # SPDX-License-Identifier: (EUPL-1.2)
 # Copyright © 2019-2022 snek.at

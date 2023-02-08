@@ -1,4 +1,4 @@
-import {authenticate} from '@snek-functions/authentication'
+import {userAuthenticate} from '@snek-functions/authentication'
 import {sendDeleteUser} from '@snek-functions/email'
 
 import {fn, url} from './factory'
@@ -36,9 +36,10 @@ const deleteAccount = fn<
 
         const email = (data as {email: string}).email
 
-        const {data: userData, errors} = await authenticate.execute({
+        const {data: userData, errors} = await userAuthenticate.execute({
           username: email,
-          password: args.password || ''
+          password: args.password || '',
+          resource: 'user_delete'
         })
 
         if (errors.length > 0) {
@@ -46,7 +47,7 @@ const deleteAccount = fn<
         }
 
         await usersDelete({
-          userId: userData.user_id
+          userId: userData.userId
         })
       }
     }
